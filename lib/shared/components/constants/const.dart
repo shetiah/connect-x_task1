@@ -5,16 +5,15 @@
 //   //color for search screen
 //   return NewsAppCubit.get(context).isDark ? Colors.white : Colors.black;
 // }
+import 'package:flutter/material.dart';
 
-// TextStyle GetMyDefTextStyle1(dynamic context) {
-//   //color for listNews screen
-//   return TextStyle(
-//       fontSize: 18.0,
-//       fontWeight: FontWeight.w600,
-//       color: NewsAppCubit.get(context).isDark
-//           ? Color.fromARGB(255, 90, 48, 85)
-//           : Colors.black);
-// }
+TextStyle GetMyDefTextStyle1(dynamic context) {
+  //color for listNews screen
+  return const TextStyle(
+      fontSize: 18.0,
+      fontWeight: FontWeight.w600,
+      color:  Colors.black);
+}
 
 
 

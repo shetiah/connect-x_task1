@@ -24,13 +24,13 @@ class InitErrorState extends AppState {}
 
 class SearchDataState extends AppState {}
 class LoadingSearchState extends AppState {}
-// class ChangeUrlState extends AppState {}
+class ChangeUrlState extends AppState {}
 
-// class StartedLoadingUrlState extends AppState {}
+class StartedLoadingUrlState extends AppState {}
 
-// class ProgressLoadingUrlState extends AppState {}
+class ProgressLoadingUrlState extends AppState {}
 
-// class FinishedLoadingUrlState extends AppState {}
+class FinishedLoadingUrlState extends AppState {}
 
 // class LoadingSearchState extends AppState {}
 

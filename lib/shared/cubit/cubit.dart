@@ -7,12 +7,13 @@ import 'package:task1/modules/saved_page.dart';
 import 'package:task1/modules/news_page.dart';
 import 'package:task1/shared/cubit/states.dart';
 import 'package:task1/shared/network/remote/dioHelper.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(InitState());
 
   static AppCubit get(context) => BlocProvider.of(context);
-  // int loadingPrecentage = 0;
+  int loadingPrecentage = 0;
   // bool isDark = false;
   // Timer? timer;
   // int seconds = 0;
@@ -32,26 +33,26 @@ class AppCubit extends Cubit<AppState> {
   //   emit(TimerCanceledState());
   // }
 
-  // WebViewController controllerWeb = WebViewController();
-  // void changeUrl({required String URL}) {
-  //   controllerWeb.loadRequest(Uri.parse(URL)).then((value) {
-  //     emit(ChangeUrlState());
-  //   });
-  //   controllerWeb.setNavigationDelegate(NavigationDelegate(
-  //     onPageStarted: (url) {
-  //       loadingPrecentage = 0;
-  //       emit(StartedLoadingUrlState());
-  //     },
-  //     onProgress: (progress) {
-  //       loadingPrecentage = progress;
-  //       emit(ProgressLoadingUrlState());
-  //     },
-  //     onPageFinished: (url) {
-  //       loadingPrecentage = 100;
-  //       emit(FinishedLoadingUrlState());
-  //     },
-  //   ));
-  // }
+  WebViewController controllerWeb = WebViewController();
+  void changeUrl({required String URL}) {
+    controllerWeb.loadRequest(Uri.parse(URL)).then((value) {
+      emit(ChangeUrlState());
+    });
+    controllerWeb.setNavigationDelegate(NavigationDelegate(
+      onPageStarted: (url) {
+        loadingPrecentage = 0;
+        emit(StartedLoadingUrlState());
+      },
+      onProgress: (progress) {
+        loadingPrecentage = progress;
+        emit(ProgressLoadingUrlState());
+      },
+      onPageFinished: (url) {
+        loadingPrecentage = 100;
+        emit(FinishedLoadingUrlState());
+      },
+    ));
+  }
 
   // void changeThemeMode({bool? isdark}) {
   //   if (isdark == null) {
