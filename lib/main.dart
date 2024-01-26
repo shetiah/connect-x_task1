@@ -41,12 +41,6 @@ class AppMain extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // bottomNavigationBar: BottomNavigationBar(
-                  //   items: cubit.BottomNavItems,
-                  //   cubit.bottomNavIndex: cubit.bottomNavIndex,
-                  //   onTap: (index) => cubit.changeIndex(index),
-
-                  // ),
                   bottomNavigationBar: Container(
                     margin: EdgeInsets.symmetric(
                       horizontal: displayWidth * .13,
@@ -77,27 +71,27 @@ class AppMain extends StatelessWidget {
             child: Stack(
               children: [
                 AnimatedContainer(
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   curve: Curves.fastLinearToSlowEaseIn,
                   width: index == cubit.bottomNavIndex
                       ? displayWidth * .32
                       : displayWidth * .18,
                   alignment: Alignment.center,
                   child: AnimatedContainer(
-                    duration: Duration(seconds: 1),
+                    duration:const Duration(seconds: 1),
                     curve: Curves.fastLinearToSlowEaseIn,
                     height: index == cubit.bottomNavIndex ? displayWidth * .12 : 0,
                     width: index == cubit.bottomNavIndex ? displayWidth * .32 : 0,
                     decoration: BoxDecoration(
                       color: index == cubit.bottomNavIndex
-                          ? Color(0xFF3F92A4).withOpacity(0.2)
+                          ? const Color(0xFF3F92A4).withOpacity(0.2)
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
                 ),
                 AnimatedContainer(
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   curve: Curves.fastLinearToSlowEaseIn,
                   width: index == cubit.bottomNavIndex
                       ? displayWidth * .31
@@ -108,20 +102,20 @@ class AppMain extends StatelessWidget {
                       Row(
                         children: [
                           AnimatedContainer(
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
                             width:
                                 index == cubit.bottomNavIndex ? displayWidth * .13 : 0,
                           ),
                           AnimatedOpacity(
                             opacity: index == cubit.bottomNavIndex ? 1 : 0,
-                            duration: Duration(seconds: 1),
+                            duration: const Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
                             child: Text(
                               index == cubit.bottomNavIndex
                                   ? '${listOfStrings[index]}'
                                   : '',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color:Color(0xFF3F92A4),
                                 fontWeight: FontWeight.w600,
                                 fontSize: 15,
@@ -133,7 +127,7 @@ class AppMain extends StatelessWidget {
                       Row(
                         children: [
                           AnimatedContainer(
-                            duration: Duration(seconds: 1),
+                            duration:const  Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
                             width:
                                 index == cubit.bottomNavIndex ? displayWidth * .03 : 20,
@@ -142,7 +136,7 @@ class AppMain extends StatelessWidget {
                             listOfIcons[index],
                             size: displayWidth * .076,
                             color: index == cubit.bottomNavIndex
-                                ? Color(0xFF3F92A4)
+                                ?const Color(0xFF3F92A4)
                                 : Colors.black26,
                           ),
                         ],
