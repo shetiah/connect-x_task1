@@ -6,9 +6,7 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        //hena nta tgeeb link elappis bs
         baseUrl: 'https://newsapi.org/',
-        //3shan yzhrha lama ykun fe error
         receiveDataWhenStatusError: true,
       ),
     );

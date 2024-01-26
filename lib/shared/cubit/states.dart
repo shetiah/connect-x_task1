@@ -2,15 +2,15 @@ abstract class AppState {}
 
 class InitState extends AppState {}
 
-// class ChangeBottomNavItems extends AppState {}
+class ChangeBottomNavItems extends AppState {}
 
-// class GetDataErrorState extends AppState {}
+class GetDataErrorState extends AppState {}
 
-// class GetBuisnessDataState extends AppState {}
+class LoadingInitalDataState extends AppState {}
 
-// class LoadingBuisnessDataState extends AppState {}
+class GetInitDataState extends AppState {}
 
-// class BuisnessErrorState extends AppState {}
+class InitErrorState extends AppState {}
 
 // class ScienceErrorState extends AppState {}
 
@@ -22,8 +22,8 @@ class InitState extends AppState {}
 
 // class ChangeThemeModeState extends AppState {}
 
-// class SearchDataState extends AppState {}
-
+class SearchDataState extends AppState {}
+class LoadingSearchState extends AppState {}
 // class ChangeUrlState extends AppState {}
 
 // class StartedLoadingUrlState extends AppState {}

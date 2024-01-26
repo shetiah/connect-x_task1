@@ -1,7 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task1/modules/HomePage.dart';
 import 'package:task1/shared/cubit/blocobserver.dart';
 import 'package:task1/shared/cubit/cubit.dart';
 import 'package:task1/shared/cubit/states.dart';
@@ -25,15 +23,23 @@ class AppMain extends StatelessWidget {
         create: (BuildContext context) => AppCubit(),
         child: BlocConsumer<AppCubit, AppState>(
             builder: (context, state) {
+              var cubit = AppCubit.get(context);
               return  MaterialApp(
                 debugShowCheckedModeBanner: false,
                 home: Scaffold(
                   appBar: AppBar(
                     leading: IconButton(icon:const Icon(Icons.menu), onPressed: () {  }, ),
-                    title: Text("NewsApp"),
+                    title: const Text("NewsApp"),
                     actions: [IconButton(icon:const Icon(Icons.mic), onPressed: () {  }, ),],
-
+                  
                   ),
+                  bottomNavigationBar: BottomNavigationBar(
+                    items: cubit.BottomNavItems,
+                    currentIndex: cubit.bottomNavIndex,
+                    onTap: (index) => cubit.changeIndex(index),
+                    
+                  ),
+                  body: cubit.Screens[cubit.bottomNavIndex],
                 ),
               );
             }, listener: (context, state) {}));
