@@ -20,10 +20,9 @@ class AppMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (BuildContext context) => AppCubit(),
-        child: BlocConsumer<AppCubit, AppState>(
+        create: (BuildContext context) => AppCubit()..getInitalDataFromApis(),
+         child: BlocConsumer<AppCubit, AppState>(
             builder: (context, state) {
-              double displayWidth = MediaQuery.of(context).size.width;
               var cubit = AppCubit.get(context);
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
@@ -43,10 +42,10 @@ class AppMain extends StatelessWidget {
                   ),
                   bottomNavigationBar: Container(
                     margin: EdgeInsets.symmetric(
-                      horizontal: displayWidth * .13,
-                      vertical: displayWidth * .07,
+                      horizontal: cubit.getScreenWidth(context) * .13,
+                      vertical: cubit.getScreenWidth(context) * .07,
                     ),
-                    height: displayWidth * .155,
+                    height: cubit.getScreenWidth(context) * .155,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
@@ -61,7 +60,7 @@ class AppMain extends StatelessWidget {
                        child: ListView.builder(
           itemCount: 3,
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(horizontal: displayWidth * .02),
+          padding: EdgeInsets.symmetric(horizontal: cubit.getScreenWidth(context) * .02),
           itemBuilder: (context, index) => InkWell(
             onTap: () {
                 cubit.changeIndex(index);
@@ -74,14 +73,14 @@ class AppMain extends StatelessWidget {
                   duration: const Duration(seconds: 1),
                   curve: Curves.fastLinearToSlowEaseIn,
                   width: index == cubit.bottomNavIndex
-                      ? displayWidth * .32
-                      : displayWidth * .18,
+                      ? cubit.getScreenWidth(context) * .32
+                      : cubit.getScreenWidth(context) * .18,
                   alignment: Alignment.center,
                   child: AnimatedContainer(
                     duration:const Duration(seconds: 1),
                     curve: Curves.fastLinearToSlowEaseIn,
-                    height: index == cubit.bottomNavIndex ? displayWidth * .12 : 0,
-                    width: index == cubit.bottomNavIndex ? displayWidth * .32 : 0,
+                    height: index == cubit.bottomNavIndex ? cubit.getScreenWidth(context) * .12 : 0,
+                    width: index == cubit.bottomNavIndex ? cubit.getScreenWidth(context) * .32 : 0,
                     decoration: BoxDecoration(
                       color: index == cubit.bottomNavIndex
                           ? const Color(0xFF3F92A4).withOpacity(0.2)
@@ -94,8 +93,8 @@ class AppMain extends StatelessWidget {
                   duration: const Duration(seconds: 1),
                   curve: Curves.fastLinearToSlowEaseIn,
                   width: index == cubit.bottomNavIndex
-                      ? displayWidth * .31
-                      : displayWidth * .18,
+                      ? cubit.getScreenWidth(context) * .31
+                      : cubit.getScreenWidth(context) * .18,
                   alignment: Alignment.center,
                   child: Stack(
                     children: [
@@ -105,7 +104,7 @@ class AppMain extends StatelessWidget {
                             duration: const Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
                             width:
-                                index == cubit.bottomNavIndex ? displayWidth * .13 : 0,
+                                index == cubit.bottomNavIndex ? cubit.getScreenWidth(context) * .13 : 0,
                           ),
                           AnimatedOpacity(
                             opacity: index == cubit.bottomNavIndex ? 1 : 0,
@@ -130,11 +129,11 @@ class AppMain extends StatelessWidget {
                             duration:const  Duration(seconds: 1),
                             curve: Curves.fastLinearToSlowEaseIn,
                             width:
-                                index == cubit.bottomNavIndex ? displayWidth * .03 : 20,
+                                index == cubit.bottomNavIndex ? cubit.getScreenWidth(context) * .03 : 20,
                           ),
                           Icon(
                             listOfIcons[index],
-                            size: displayWidth * .076,
+                            size: cubit.getScreenWidth(context) * .076,
                             color: index == cubit.bottomNavIndex
                                 ?const Color(0xFF3F92A4)
                                 : Colors.black26,
@@ -150,7 +149,7 @@ class AppMain extends StatelessWidget {
         ),
      
                   ),
-                  body: cubit.Screens[cubit.bottomNavIndex],
+                  body: cubit.screens[cubit.bottomNavIndex],
                 ),
               );
             },
@@ -159,9 +158,9 @@ class AppMain extends StatelessWidget {
   }
 }
   List<IconData> listOfIcons = [
-    Icons.newspaper_rounded,
-    Icons.newspaper_outlined,
-    Icons.save_rounded,
+    Icons.article_outlined,
+   Icons.newspaper_sharp,
+   Icons.bookmark_add_rounded,
   ];
 
   List<String> listOfStrings = [

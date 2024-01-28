@@ -1,20 +1,37 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task1/shared/components/components/my_main_components.dart';
 import 'package:task1/shared/cubit/cubit.dart';
 import 'package:task1/shared/cubit/states.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class CategoriesPage extends StatelessWidget {
+  final String categoryType;
+  const CategoriesPage(this.categoryType, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  BlocConsumer<AppCubit, AppState>(
-            builder: (context, state) {
-              var cubit = AppCubit.get(context);
-              return Scaffold(
-                  body: Padding(
+   AppCubit.get(context).getCategoricalDataFromApis(category: categoryType);
+          
+    return BlocConsumer<AppCubit, AppState>(
+        builder: (context, state) {
+          var cubit = AppCubit.get(context);
+          return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_outlined,size:24),
+                  onPressed: () {Navigator.pop(context);},
+                ),
+                title: const Text("NewsApp"),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.mic),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+              body: Padding(
                 padding: const EdgeInsets.only(left: 15),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -45,17 +62,18 @@ class HomePage extends StatelessWidget {
                           child: ListView.separated(
                               itemBuilder: (context, i) => NewsItem(
                                   context: context,
-                                  DataList: cubit.initalData[i]),
+                                  DataList: cubit.categoryData[i]),
                               separatorBuilder: (context, index) => Separtor(),
-                              itemCount: cubit.initalData.length),
+                              itemCount: cubit.categoryData.length),
                         );
                       },
                       fallback: (BuildContext context) {
                         return const Expanded(
-                          child:  Center(
+                          child: Center(
                             child: CircularProgressIndicator(
-                              backgroundColor: Color.fromARGB(245, 158, 158, 158),
-                              color:Color(0xFF3F92A4),
+                              backgroundColor:
+                                  Color.fromARGB(245, 158, 158, 158),
+                              color: Color(0xFF3F92A4),
                             ),
                           ),
                         );
@@ -65,7 +83,7 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ));
-            },
-            listener: (context, state) {});
+        },
+        listener: (context, state) {});
   }
 }
