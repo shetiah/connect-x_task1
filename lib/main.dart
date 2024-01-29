@@ -1,5 +1,7 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task1/shared/components/components/my_main_components.dart';
 import 'package:task1/shared/components/constants/my-theme.dart';
 import 'package:task1/shared/cubit/blocobserver.dart';
 import 'package:task1/shared/cubit/cubit.dart';
@@ -34,7 +36,7 @@ class AppMain extends StatelessWidget {
                       icon: const Icon(Icons.menu),
                       onPressed: () {},
                     ),
-                    title:  Text("NewsApp",
+                    title: Text("NewsApp",
                         style: Theme.of(context).textTheme.titleLarge),
                     actions: [
                       IconButton(
@@ -43,127 +45,157 @@ class AppMain extends StatelessWidget {
                       ),
                     ],
                   ),
-                  bottomNavigationBar: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: cubit.getScreenWidth(context) * .13,
-                      vertical: cubit.getScreenWidth(context) * .07,
-                    ),
-                    height: cubit.getScreenWidth(context) * .155,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(.1),
-                          blurRadius: 30,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: ListView.builder(
-                      itemCount: 3,
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: cubit.getScreenWidth(context) * .02),
-                      itemBuilder: (context, index) => InkWell(
-                        onTap: () {
-                          cubit.changeIndex(index);
-                        },
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        child: Stack(
-                          children: [
-                            AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                              width: index == cubit.bottomNavIndex
-                                  ? cubit.getScreenWidth(context) * .32
-                                  : cubit.getScreenWidth(context) * .18,
-                              alignment: Alignment.center,
-                              child: AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.fastLinearToSlowEaseIn,
-                                height: index == cubit.bottomNavIndex
-                                    ? cubit.getScreenWidth(context) * .12
-                                    : 0,
-                                width: index == cubit.bottomNavIndex
-                                    ? cubit.getScreenWidth(context) * .32
-                                    : 0,
-                                decoration: BoxDecoration(
-                                  color: index == cubit.bottomNavIndex
-                                      ? const Color(0xFF3F92A4).withOpacity(0.2)
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
+                  body: Column(
+                    children: [
+                       Expanded(
+                  child: Stack(
+                    children: [
+                      cubit.screens[cubit.bottomNavIndex],
+                       Positioned(
+                        left: cubit.getScreenWidth(context) * .12,
+                        bottom: cubit.getScreenWidth(context) * .06,
+                        child: Container(
+                          width: cubit.getScreenWidth(context) * .7,
+                          // margin: EdgeInsets.symmetric(
+                          //   horizontal: cubit.getScreenWidth(context) * .13,
+                          //   vertical: cubit.getScreenWidth(context) * .07,
+                          // ),
+                          height: cubit.getScreenWidth(context) * .155,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(.1),
+                                blurRadius: 30,
+                                offset: const Offset(0, 10),
                               ),
-                            ),
-                            AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.fastLinearToSlowEaseIn,
-                              width: index == cubit.bottomNavIndex
-                                  ? cubit.getScreenWidth(context) * .31
-                                  : cubit.getScreenWidth(context) * .18,
-                              alignment: Alignment.center,
+                            ],
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: ListView.builder(
+                            itemCount: 3,
+                            scrollDirection: Axis.horizontal,
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    cubit.getScreenWidth(context) * .02),
+                            itemBuilder: (context, index) => InkWell(
+                              onTap: () {
+                                cubit.changeIndex(index);
+                              },
+                              splashColor: Colors.transparent,
+                              highlightColor: const Color.fromRGBO(0, 0, 0, 0),
                               child: Stack(
                                 children: [
-                                  Row(
-                                    children: [
-                                      AnimatedContainer(
-                                        duration: const Duration(seconds: 1),
-                                        curve: Curves.fastLinearToSlowEaseIn,
-                                        width: index == cubit.bottomNavIndex
-                                            ? cubit.getScreenWidth(context) *
-                                                .13
-                                            : 0,
-                                      ),
-                                      AnimatedOpacity(
-                                        opacity: index == cubit.bottomNavIndex
-                                            ? 1
-                                            : 0,
-                                        duration: const Duration(seconds: 1),
-                                        curve: Curves.fastLinearToSlowEaseIn,
-                                        child: Text(
-                                          index == cubit.bottomNavIndex
-                                              ? '${listOfStrings[index]}'
-                                              : '',
-                                          style: const TextStyle(
-                                            color: Color(0xFF3F92A4),
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      AnimatedContainer(
-                                        duration: const Duration(seconds: 1),
-                                        curve: Curves.fastLinearToSlowEaseIn,
-                                        width: index == cubit.bottomNavIndex
-                                            ? cubit.getScreenWidth(context) *
-                                                .03
-                                            : 20,
-                                      ),
-                                      Icon(
-                                        listOfIcons[index],
-                                        size: cubit.getScreenWidth(context) *
-                                            .076,
+                                  AnimatedContainer(
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.fastLinearToSlowEaseIn,
+                                    width: index == cubit.bottomNavIndex
+                                        ? cubit.getScreenWidth(context) * .32
+                                        : cubit.getScreenWidth(context) * .18,
+                                    alignment: Alignment.center,
+                                    child: AnimatedContainer(
+                                      duration: const Duration(seconds: 1),
+                                      curve: Curves.fastLinearToSlowEaseIn,
+                                      height: index == cubit.bottomNavIndex
+                                          ? cubit.getScreenWidth(context) * .12
+                                          : 0,
+                                      width: index == cubit.bottomNavIndex
+                                          ? cubit.getScreenWidth(context) * .32
+                                          : 0,
+                                      decoration: BoxDecoration(
                                         color: index == cubit.bottomNavIndex
                                             ? const Color(0xFF3F92A4)
-                                            : Colors.black26,
+                                                .withOpacity(0.2)
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(50),
                                       ),
-                                    ],
+                                    ),
+                                  ),
+                                  AnimatedContainer(
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.fastLinearToSlowEaseIn,
+                                    width: index == cubit.bottomNavIndex
+                                        ? cubit.getScreenWidth(context) * .31
+                                        : cubit.getScreenWidth(context) * .18,
+                                    alignment: Alignment.center,
+                                    child: Stack(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            AnimatedContainer(
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              curve:
+                                                  Curves.fastLinearToSlowEaseIn,
+                                              width:
+                                                  index == cubit.bottomNavIndex
+                                                      ? cubit.getScreenWidth(
+                                                              context) *
+                                                          .13
+                                                      : 0,
+                                            ),
+                                            AnimatedOpacity(
+                                              opacity:
+                                                  index == cubit.bottomNavIndex
+                                                      ? 1
+                                                      : 0,
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              curve:
+                                                  Curves.fastLinearToSlowEaseIn,
+                                              child: Text(
+                                                index == cubit.bottomNavIndex
+                                                    ? '${listOfStrings[index]}'
+                                                    : '',
+                                                style: const TextStyle(
+                                                  color: Color(0xFF3F92A4),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            AnimatedContainer(
+                                              duration:
+                                                  const Duration(seconds: 1),
+                                              curve:
+                                                  Curves.fastLinearToSlowEaseIn,
+                                              width:
+                                                  index == cubit.bottomNavIndex
+                                                      ? cubit.getScreenWidth(
+                                                              context) *
+                                                          .03
+                                                      : 20,
+                                            ),
+                                            Icon(
+                                              listOfIcons[index],
+                                              size: cubit
+                                                      .getScreenWidth(context) *
+                                                  .076,
+                                              color:
+                                                  index == cubit.bottomNavIndex
+                                                      ? const Color(0xFF3F92A4)
+                                                      : Colors.black26,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  body: cubit.screens[cubit.bottomNavIndex],
+                ),
+                    ],
+                  ),
                 ),
               );
             },

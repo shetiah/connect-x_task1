@@ -1,134 +1,67 @@
-// import 'package:flutter/material.dart';
-
-// Widget defaultFormField({
-//   required TextEditingController controller,
-//   required TextInputType type,
-//   Function? onSubmit,
-//   Function? onChange,
-//   Function? onTap,
-//   bool isPassword = false,
-//   required Function validate,
-//   required String label,
-//   required IconData prefix,
-//   IconData? suffix,
-//   Function? suffixPressed,
-//   bool isClickable = true,
-//   required dynamic context,
-// }) =>
-//     TextFormField(
-//       controller: controller,
-//       keyboardType: type,
-//       obscureText: isPassword,
-//       enabled: isClickable,
-//       onFieldSubmitted: (s) {
-//         onSubmit!(s);
-//       },
-//       onChanged: (s) {
-//         onChange!(s);
-//       },
-//       onTap: () {
-//         onTap!();
-//       },
-//       validator: (s) {
-//         return validate(s);
-//       },
-//       decoration: InputDecoration(
-//         prefixIconColor: GetMyDefColor1(context),
-//         suffixIconColor: GetMyDefColor1(context),
-//         labelText: label,
-//         labelStyle: TextStyle(
-//           color: GetMyDefColor1(context),
-//         ),
-//         prefixIcon: Icon(
-//           prefix,
-//         ),
-//         suffixIcon: suffix != null
-//             ? IconButton(
-//                 onPressed: () {
-//                   suffixPressed!();
-//                 },
-//                 icon: Icon(
-//                   suffix,
-//                   size: 20,
-//                 ),
-//               )
-//             : null,
-//         border: OutlineInputBorder(),
-//       ),
-//     );
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:task1/modules/categoriees_screen.dart';
 import 'package:task1/modules/web_view.dart';
-import 'package:task1/shared/components/constants/const.dart';
 import 'package:task1/shared/cubit/cubit.dart';
 
-Widget Separtor() => Container(
-      color: Colors.grey[300],
-      height: 1,
+Widget separtor() => const SizedBox(
+      height: 10,
       width: double.infinity,
     );
-Widget NewsItem({
+Widget newsItem({
   required BuildContext context,
-  required Map<String, dynamic> DataList,
+  required Map<String, dynamic> dataList,
 }) =>
     InkWell(
       onTap: () {
-        AppCubit.get(context).changeUrl(URL: '${DataList['url']}');
-        // _launchURL('${DataList['url']}');
+        AppCubit.get(context).changeUrl(URL: '${dataList['url']}');
+        // _launchURL('${dataList['url']}');
         navigateTo(context, WebScreen());
       },
       child: Dismissible(
-        key: Key(""),
+        key: const Key(""),
         onDismissed: (direction) {
           
         },
-        child: Container(
-          color: Color.fromARGB(255, 239, 238, 240),
-          child: Row(
-            children: [
-              Container(
-                width: 120.0,
-                height: 120.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    10.0,
-                  ),
-                  image: DataList["urlToImage"] != null
-                      ? DecorationImage(
-                          image: NetworkImage(DataList["urlToImage"]),
-                          fit: BoxFit.cover,
-                        )
-                      : const DecorationImage(
-                          image: AssetImage('assets/icons/news.png'),
-                          fit: BoxFit.cover,
-                        ),
+        child: Row(
+          children: [
+            Container(
+              width: 120.0,
+              height: 120.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  10.0,
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      "${DataList["title"]}",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: GetMyDefTextStyle1(context),
-                    ),
-                    Text(
-                      "${DataList["description"]}",
-                      // style:Theme.of(context).textTheme.bodyMedium ,
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 150, 123, 123),
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
+                image: dataList["urlToImage"] != null
+                    ? DecorationImage(
+                        image: NetworkImage(dataList["urlToImage"]),
+                        fit: BoxFit.cover,
+                      )
+                    : const DecorationImage(
+                        image: AssetImage('assets/icons/news.png'),
+                        fit: BoxFit.cover,
                       ),
-                    )
-                  ],
-                ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                children: [
+                  Text(
+                    "${dataList["title"]}",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text(
+                     maxLines: 2,
+                    "${dataList["description"]}",
+                     style:Theme.of(context).textTheme.bodySmall,
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -148,7 +81,7 @@ Widget myImage({required String urlToImage, required String ctg,required BuildCo
         height: 160.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
-            10.0,
+            20.0,
           ),
         
           image: DecorationImage(
@@ -205,7 +138,7 @@ Widget buildTaskItem(Map model, context) => Dismissible(
                 //   id: model['id'],
                 // );
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.check_box,
                 color: Colors.green,
               ),
@@ -217,7 +150,7 @@ Widget buildTaskItem(Map model, context) => Dismissible(
                 //   id: model['id'],
                 // );
               },
-              icon: Icon(
+              icon:const Icon(
                 Icons.archive,
                 color: Colors.black45,
               ),
@@ -236,7 +169,7 @@ Widget tasksBuilder({
   required List<Map> tasks,
 }) =>
     ConditionalBuilder(
-      condition: tasks.length > 0,
+      condition: tasks.isNotEmpty,
       builder: (context) => ListView.separated(
         itemBuilder: (context, index) {
           return buildTaskItem(tasks[index], context);
@@ -244,7 +177,7 @@ Widget tasksBuilder({
         separatorBuilder: (context, index) => myDivider(),
         itemCount: tasks.length,
       ),
-      fallback: (context) => Center(
+      fallback: (context) => const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

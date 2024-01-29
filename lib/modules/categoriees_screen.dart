@@ -59,10 +59,10 @@ class CategoriesPage extends StatelessWidget {
                       builder: (BuildContext context) {
                         return Expanded(
                           child: ListView.separated(
-                              itemBuilder: (context, i) => NewsItem(
+                              itemBuilder: (context, i) => newsItem(
                                   context: context,
-                                  DataList: cubit.categoryData[i]),
-                              separatorBuilder: (context, index) => Separtor(),
+                                  dataList: cubit.categoryData[i]),
+                              separatorBuilder: (context, index) => separtor(),
                               itemCount: cubit.categoryData.length),
                         );
                       },
