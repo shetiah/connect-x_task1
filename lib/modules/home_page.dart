@@ -1,7 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task1/main.dart';
 import 'package:task1/shared/components/components/my_main_components.dart';
 import 'package:task1/shared/cubit/cubit.dart';
 import 'package:task1/shared/cubit/states.dart';
@@ -40,32 +39,30 @@ class HomePage extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
-                Expanded(
-                  child: ConditionalBuilder(
-                    builder: (BuildContext context) {
-                      return Expanded(
-                        child: ListView.separated(
-                            itemBuilder: (context, i) => newsItem(
-                                context: context,
-                                dataList: cubit.initalData[i]),
-                            separatorBuilder: (context, index) =>
-                                separtor(),
-                            itemCount: cubit.initalData.length),
-                      );
-                    },
-                    fallback: (BuildContext context) {
-                      return const Expanded(
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor:
-                                Color.fromARGB(245, 158, 158, 158),
-                            color: Color(0xFF3F92A4),
-                          ),
+                ConditionalBuilder(
+                  builder: (BuildContext context) {
+                    return Expanded(
+                      child: ListView.separated(
+                          itemBuilder: (context, i) => newsItem(
+                              context: context,
+                              dataList: cubit.initalData[i]),
+                          separatorBuilder: (context, index) =>
+                              separtor(),
+                          itemCount: cubit.initalData.length),
+                    );
+                  },
+                  fallback: (BuildContext context) {
+                    return const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor:
+                              Color.fromARGB(245, 158, 158, 158),
+                          color: Color(0xFF3F92A4),
                         ),
-                      );
-                    },
-                    condition: true,
-                  ),
+                      ),
+                    );
+                  },
+                  condition: true,
                 ),
               ],
             ),

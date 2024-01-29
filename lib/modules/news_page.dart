@@ -41,18 +41,18 @@ class MyNewsPage extends StatelessWidget {
                 Column(
                   children: [
                     myImage(
-                        urlToImage: 'assets/icons/sports.png',
-                        ctg: 'sports',
+                        urlToImage: 'assets/icons/entertainment.jpeg',
+                        ctg: 'entertainment',
                         context: context),
                     const SizedBox(height: 14),
                     myImage(
-                        urlToImage: 'assets/icons/science.avif',
-                        ctg: 'science',
+                        urlToImage: 'assets/icons/technology.jpg',
+                        ctg: 'technology',
                         context: context),
                     const SizedBox(height: 14),
                     myImage(
-                        urlToImage: 'assets/icons/buisness.png',
-                        ctg: 'business',
+                        urlToImage: 'assets/icons/health.avif',
+                        ctg: 'health',
                         context: context),
                   ],
                 )
