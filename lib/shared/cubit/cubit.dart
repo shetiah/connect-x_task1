@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:task1/modules/home_page.dart';
 import 'package:task1/modules/saved_page.dart';
 
@@ -195,4 +196,117 @@ class AppCubit extends Cubit<AppState> {
   //     emit(GetDataErrorState());
   //   });
   // }
+
+
+
+//   void deleteTask({
+//    required id
+// })
+// {
+//  emit(DeletingDatabseLoadingState());
+//   database.rawDelete('DELETE FROM tasks WHERE id = ?', [id])
+//       .then((value)
+//   {
+//     getdataDatabase(database);
+//     emit(DeleteDataStatus());
+//   });
+// }
+
+late Database database;
+//  void createDatabase()
+//  {
+//   openDatabase(
+//      'todo.db',
+//      version: 1,
+//      onCreate: (db, version) async {
+//        print("database created");
+//        // await db.execute(
+//        //   'CREATE TABLE tasks (id INTEGER PRIMARY KEY,title TEXT,date TEXT,status TEXT) '
+//        // );
+//        db.execute('CREATE TABLE news (id INTEGER PRIMARY KEY,url TEXT,status TEXT) ').then((value) {
+//          print("Table created");
+//        }).catchError((onError){
+//          print("error when creating Table ${onError.toString()}");
+//        });
+//      },
+//      onOpen: (db) async{
+//        print("database opened");
+//        getdataDatabase(db);
+
+
+//      },
+//    ).then((value) {
+//      database=value;
+//      emit(CreateDBState());
+//    });
+//  }
+// void updateData({
+//   required String Status,
+//   required int id
+// }){
+//   emit(UpdatingDatabseLoadingState());
+//    database.rawUpdate(
+//      'UPDATE tasks SET status = ? WHERE id = ?',
+//      ['$Status',id]
+//    ).then((value) {
+//      getdataDatabase(database);
+//      emit(UpdateDataStatus());
+//    });
+
+// }
+//   insertToDB(
+//      {
+//        required String date,
+//        required String time,
+//        required String title,
+
+//      }) async
+//  {
+//    await database.transaction(
+//            (txn) {
+//         return txn.rawInsert('INSERT INTO  tasks(title,date,time,status) VALUES("$title","$date","$time","new")').then((value)  {
+
+//            print("$value is inserted");
+//            emit(InsrtDBSte());
+//            getdataDatabase(database);
+//          }).catchError((error){
+//            print("${error.toString()} my error");
+//          });
+
+//        }
+//    );
+//  }
+
+
+//  getdataDatabase(db)
+//  {
+//    emit(GetDBLoadingSt());
+//    archivedTasks=[];
+//    newTasks=[];
+//    doneTasks=[];
+//  db.rawQuery('SELECT * FROM TASKS').then((value){
+//     value.forEach((element) {
+//       if(element['status']=='done')
+//         {
+//       doneTasks.add(element);
+//         }
+//       else if(element['status']=='archived')
+//         {
+//       archivedTasks.add(element);
+//         }else{
+//         newTasks.add(element);
+//       }
+//       emit(GetDBSte());
+//     });
+//   });
+
+//   }
+
+ Future<dynamic> alterTable(String TableName, String ColumneName,Database db) async {
+  //NOTE: works but i created it by my own
+   var count = await db.execute("ALTER TABLE $TableName ADD "
+       "COLUMN $ColumneName TEXT;");
+   print(await db.query(TableName));
+   return count;
+ }
 }

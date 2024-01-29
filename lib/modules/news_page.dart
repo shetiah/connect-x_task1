@@ -11,41 +11,55 @@ class MyNewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppState>(
       builder: (context, state) {
-        AppCubit cubit = AppCubit.get(context);
+        // AppCubit cubit = AppCubit.get(context);
         return Scaffold(
-          
             body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  
-                          children: [
                 Column(
                   children: [
-                    myImage(urlToImage: 'assets/icons/sports.png', ctg: 'sports', context: context),
-                   const SizedBox(height:14),
-                     myImage(urlToImage: 'assets/icons/science.avif', ctg: 'science', context: context),
-                     const SizedBox(height:14),
-                       myImage(urlToImage: 'assets/icons/buisness.png', ctg: 'business', context: context),
+                    myImage(
+                        urlToImage: 'assets/icons/sports.png',
+                        ctg: 'sports',
+                        context: context),
+                    const SizedBox(height: 14),
+                    myImage(
+                        urlToImage: 'assets/icons/science.avif',
+                        ctg: 'science',
+                        context: context),
+                    const SizedBox(height: 14),
+                    myImage(
+                        urlToImage: 'assets/icons/buisness.png',
+                        ctg: 'business',
+                        context: context),
                   ],
                 ),
-               const SizedBox(width:20),
+                const SizedBox(width: 20),
                 Column(
-                  children: [  
-                    myImage(urlToImage: 'assets/icons/sports.png', ctg: 'sports', context: context),
-                   const SizedBox(height:14),
-                     myImage(urlToImage: 'assets/icons/science.avif', ctg: 'science', context: context),
-                     const SizedBox(height:14),
-                       myImage(urlToImage: 'assets/icons/buisness.png', ctg: 'business', context: context),
-                       
-                  
+                  children: [
+                    myImage(
+                        urlToImage: 'assets/icons/sports.png',
+                        ctg: 'sports',
+                        context: context),
+                    const SizedBox(height: 14),
+                    myImage(
+                        urlToImage: 'assets/icons/science.avif',
+                        ctg: 'science',
+                        context: context),
+                    const SizedBox(height: 14),
+                    myImage(
+                        urlToImage: 'assets/icons/buisness.png',
+                        ctg: 'business',
+                        context: context),
                   ],
                 )
-                          ],
-                        ),
               ],
-            ));
+            ),
+          ],
+        ));
       },
       listener: (context, state) {},
     );
