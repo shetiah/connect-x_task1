@@ -1,6 +1,8 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:task1/models/newsmodel.dart';
 import 'package:task1/modules/categoriees_screen.dart';
+import 'package:task1/modules/details_screen.dart';
 import 'package:task1/modules/web_view.dart';
 import 'package:task1/shared/cubit/cubit.dart';
 
@@ -14,9 +16,9 @@ Widget newsItem({
 }) =>
     InkWell(
       onTap: () {
-        AppCubit.get(context).changeUrl(URL: '${dataList['url']}');
+        // AppCubit.get(context).changeUrl(URL: '${dataList['url']}');
         // _launchURL('${dataList['url']}');
-        navigateTo(context, WebScreen());
+        navigateTo(context, Details_Screen(News('dataList["sourceid"]',  'dataList["sourcename"]', dataList["author"] , dataList["title"],dataList["description"], dataList["url"], dataList["urlToImage"],  dataList["publishedAt"], dataList["content"])));
       },
       child: Dismissible(
         key: const Key(""),

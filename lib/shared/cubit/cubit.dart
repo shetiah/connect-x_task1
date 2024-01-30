@@ -82,18 +82,18 @@ class AppCubit extends Cubit<AppState> {
   List<dynamic> searchData = [];
 // void getBuisnessFromApis() {
 //     emit(LoadingBuisnessDataState());
-//     businessData = [];
+//     buainessData = [];
 //     DioHelper.getData(
 //       url: 'v2/top-headlines',
 //       query: {
-//         'country': 'US',
-//         'category': 'business',
+//         'country': 'ua',
+//         'category': 'buainess',
 //         'apiKey': '65f7f556ec76449fa7dc7c0069f040ca',
 //       },
 //     ).then((value) {
 //       //method data to extract data from response
-//       businessData = value.data['articles'];
-//       businessData.forEach((element) {
+//       buainessData = value.data['articles'];
+//       buainessData.forEach((element) {
 //         print(element["urlToImage"]);
 //       });
 
@@ -109,17 +109,17 @@ class AppCubit extends Cubit<AppState> {
     DioHelper.getData(
       url: 'v2/top-headlines',
       query: {
-        'country': 'US',
+        'country': 'ua',
         'apiKey': '8dedceccd5ac40c9af3e745c70296f43',
       },
     ).then((value) {
-
-      initalData = value.data['articles'];
-      initalData.forEach((element) {
-        print("-----------xx------");
-        print(element["title"]);
-        print("-----------xx------");
-      });
+       initalData = value.data['articles'];
+      // initalData.forEach((element) {
+      //  if(element['urlToImage']==null)
+      //  {
+      //   initalData.remove(element);
+      //  }
+      // });
       emit(GetInitDataState());
     }).catchError((onError) {
       print(onError.toString());
@@ -132,7 +132,7 @@ class AppCubit extends Cubit<AppState> {
     DioHelper.getData(
       url: 'v2/top-headlines',
       query: {
-        'country': 'US',
+        'country': 'ua',
         'category':category,
         'apiKey': '8dedceccd5ac40c9af3e745c70296f43',
       },
@@ -140,7 +140,7 @@ class AppCubit extends Cubit<AppState> {
       categoryData = value.data['articles'];
       categoryData.forEach((element) {
         print("-----------xx------");
-        print(element["title"]);
+        print(element["urlToImage"]);
         print("-----------xx------");
       });
       emit(GetCategoricalDataState());
@@ -182,7 +182,7 @@ class AppCubit extends Cubit<AppState> {
   //     print(noResults);
   //     emit(SearchDataState());
   //   }).catchError((e) {
-  //     // The request was made and the server responded with a status code
+  //     // The request was made and the server responded with a statua code
   //     // that falls out of the range of 2xx and is also not 304.
   //     if (e.response != null) {
   //       print(e.response.data);
@@ -193,7 +193,7 @@ class AppCubit extends Cubit<AppState> {
   //       print(e.requestOptions);
   //       print(e.message);
   //     }
-  //     emit(GetDataErrorState());
+  //     emit(GetDatuarrorState());
   //   });
   // }
 
@@ -208,7 +208,7 @@ class AppCubit extends Cubit<AppState> {
 //       .then((value)
 //   {
 //     getdataDatabase(database);
-//     emit(DeleteDataStatus());
+//     emit(DeleteDataStatua());
 //   });
 // }
 
@@ -221,9 +221,9 @@ late Database database;
 //      onCreate: (db, version) async {
 //        print("database created");
 //        // await db.execute(
-//        //   'CREATE TABLE tasks (id INTEGER PRIMARY KEY,title TEXT,date TEXT,status TEXT) '
+//        //   'CREATE TABLE tasks (id INTEGER PRIMARY KEY,title TEXT,date TEXT,statua TEXT) '
 //        // );
-//        db.execute('CREATE TABLE news (id INTEGER PRIMARY KEY,url TEXT,status TEXT) ').then((value) {
+//        db.execute('CREATE TABLE news (id INTEGER PRIMARY KEY,url TEXT,statua TEXT) ').then((value) {
 //          print("Table created");
 //        }).catchError((onError){
 //          print("error when creating Table ${onError.toString()}");
@@ -241,16 +241,16 @@ late Database database;
 //    });
 //  }
 // void updateData({
-//   required String Status,
+//   required String Statua,
 //   required int id
 // }){
 //   emit(UpdatingDatabseLoadingState());
 //    database.rawUpdate(
-//      'UPDATE tasks SET status = ? WHERE id = ?',
-//      ['$Status',id]
+//      'UPDATE tasks SET statua = ? WHERE id = ?',
+//      ['$Statua',id]
 //    ).then((value) {
 //      getdataDatabase(database);
-//      emit(UpdateDataStatus());
+//      emit(UpdateDataStatua());
 //    });
 
 // }
@@ -264,7 +264,7 @@ late Database database;
 //  {
 //    await database.transaction(
 //            (txn) {
-//         return txn.rawInsert('INSERT INTO  tasks(title,date,time,status) VALUES("$title","$date","$time","new")').then((value)  {
+//         return txn.rawInsert('INSERT INTO  tasks(title,date,time,statua) VALUES("$title","$date","$time","new")').then((value)  {
 
 //            print("$value is inserted");
 //            emit(InsrtDBSte());
@@ -286,11 +286,11 @@ late Database database;
 //    doneTasks=[];
 //  db.rawQuery('SELECT * FROM TASKS').then((value){
 //     value.forEach((element) {
-//       if(element['status']=='done')
+//       if(element['statua']=='done')
 //         {
 //       doneTasks.add(element);
 //         }
-//       else if(element['status']=='archived')
+//       else if(element['statua']=='archived')
 //         {
 //       archivedTasks.add(element);
 //         }else{
