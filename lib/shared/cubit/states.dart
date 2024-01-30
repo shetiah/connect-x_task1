@@ -26,3 +26,11 @@ class ProgressLoadingUrlState extends AppState {}
 
 class FinishedLoadingUrlState extends AppState {}
 
+class BookMarkedState extends AppState{}
+
+class CreateDatabaseState extends AppState{}
+class GetDatabaseLoadingState extends AppState{}
+class GetDatabaseState extends AppState {}
+class UpdatingDatabseLoadingState extends AppState{}
+class UpdateDataStatus extends AppState{}
+class InsertDatabaseState extends AppState{}

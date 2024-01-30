@@ -1,10 +1,8 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:task1/models/newsmodel.dart';
-import 'package:task1/modules/categoriees_screen.dart';
+import 'package:task1/modules/categoriees_data_screen.dart';
 import 'package:task1/modules/details_screen.dart';
-import 'package:task1/modules/web_view.dart';
-import 'package:task1/shared/cubit/cubit.dart';
 
 Widget separtor() => const SizedBox(
       height: 10,
@@ -18,53 +16,47 @@ Widget newsItem({
       onTap: () {
         // AppCubit.get(context).changeUrl(URL: '${dataList['url']}');
         // _launchURL('${dataList['url']}');
-        navigateTo(context, Details_Screen(News('dataList["sourceid"]',  'dataList["sourcename"]', dataList["author"] , dataList["title"],dataList["description"], dataList["url"], dataList["urlToImage"],  dataList["publishedAt"], dataList["content"])));
+        navigateTo(context, Details_Screen(News( "dataList[author]" , dataList["title"],dataList["description"], dataList["url"], dataList["urlToImage"],  dataList["publishedAt"], "dataList[content]")));
       },
-      child: Dismissible(
-        key: const Key(""),
-        onDismissed: (direction) {
-          
-        },
-        child: Row(
-          children: [
-            Container(
-              width: 120.0,
-              height: 120.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  10.0,
+      child: Row(
+        children: [
+          Container(
+            width: 120.0,
+            height: 120.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                10.0,
+              ),
+              image: dataList["urlToImage"] != null
+                  ? DecorationImage(
+                      image: NetworkImage(dataList["urlToImage"]),
+                      fit: BoxFit.cover,
+                    )
+                  : const DecorationImage(
+                      image: AssetImage('assets/icons/news.png'),
+                      fit: BoxFit.cover,
+                    ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  "${dataList["title"]}",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                image: dataList["urlToImage"] != null
-                    ? DecorationImage(
-                        image: NetworkImage(dataList["urlToImage"]),
-                        fit: BoxFit.cover,
-                      )
-                    : const DecorationImage(
-                        image: AssetImage('assets/icons/news.png'),
-                        fit: BoxFit.cover,
-                      ),
-              ),
+                Text(
+                   maxLines: 2,
+                  "${dataList["description"]}",
+                   style:Theme.of(context).textTheme.bodySmall,
+                )
+              ],
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    "${dataList["title"]}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Text(
-                     maxLines: 2,
-                    "${dataList["description"]}",
-                     style:Theme.of(context).textTheme.bodySmall,
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
 void navigateTo(context, widget) => Navigator.push(
@@ -211,3 +203,14 @@ Widget myDivider() => Padding(
         color: Colors.grey[300],
       ),
     );
+
+String getDateFromApis(String dateAndTime)
+{
+ String date = dateAndTime.split("T")[0];
+  return date;
+}
+// String getTimeFromApi(String dateAndTime)
+// {
+//    String time = dateAndTime.split("T")[1];
+//    return time;
+// }

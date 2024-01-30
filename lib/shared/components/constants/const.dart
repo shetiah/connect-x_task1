@@ -14,3 +14,6 @@ TextStyle GetMyDefTextStyle1(dynamic context) {
       fontWeight: FontWeight.w600,
       color:  Colors.black);
 }
+ Icon bookMarkedstate=const Icon(Icons.bookmark_border_rounded,color: Colors.black,);
+  Icon unBookMarkedstaet=const Icon(Icons.bookmark,color: Colors.black,);
+  

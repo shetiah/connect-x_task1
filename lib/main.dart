@@ -21,7 +21,7 @@ class AppMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (BuildContext context) => AppCubit()..getInitalDataFromApis(),
+        create: (BuildContext context) => AppCubit()..getInitalDataFromApis()..createDatabase(),
         child: BlocConsumer<AppCubit, AppState>(
             builder: (context, state) {
               var cubit = AppCubit.get(context);
