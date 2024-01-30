@@ -19,12 +19,12 @@ class AppCubit extends Cubit<AppState> {
 
   String? lastQeuery;
   bool noResults = true;
-  Icon bookMarkdIcon = bookMarkedstate;
+  Icon realbkmarkIcon = unBookMarkedicon;
 
-  void bookMark(News newsitem) {
+  Future<void> bookMark(News newsitem) async {
     if (newsitem.bookMarked) {
-      updateData(bookmarked: "no", id: newsitem.id);
-      bookMarkdIcon = unBookMarkedstaet;
+     await updateData(bookmarked: "no", id: newsitem.id);
+      realbkmarkIcon = unBookMarkedicon;
     } else {
       bool alreadyExist = false;
       for (var element in bookMarkedData) {
@@ -33,24 +33,18 @@ class AppCubit extends Cubit<AppState> {
         }
       }
       if (alreadyExist) {
-        updateData(bookmarked: "yes", id: newsitem.id);
+       await updateData(bookmarked: "yes", id: newsitem.id);
       } else {
-        insertToDB(
-            author: newsitem.author,
-            title: newsitem.title,
-            description: newsitem.description,
-            url: newsitem.url,
-            urlToImage: newsitem.urlToImage,
-            publishedAt: newsitem.publishedAt,
-            content: newsitem.content);
-        updateData(bookmarked: "yes", id: newsitem.id);
+       await insertToDB(newsitem: newsitem);
+        await updateData(bookmarked: "yes", id: newsitem.id);
       }
-      bookMarkdIcon = bookMarkedstate;
+      realbkmarkIcon = bookmarkedicon;
     }
     newsitem.bookMarked = !newsitem.bookMarked;
     emit(BookMarkedState());
   }
-
+Future<void> deleteDatabase(String path) =>
+    databaseFactory.deleteDatabase(path);
   double getScreenWidth(BuildContext context) =>
       MediaQuery.of(context).size.width;
   double getScreenHeight(BuildContext context) =>
@@ -75,6 +69,7 @@ class AppCubit extends Cubit<AppState> {
   List<dynamic> searchData = [];
 
   List<dynamic> bookMarkedData = [];
+  List<dynamic> newsItemDatadb = [];
 
   void getInitalDataFromApis() {
     emit(LoadingInitalDataState());
@@ -125,19 +120,6 @@ class AppCubit extends Cubit<AppState> {
       version: 1,
       onCreate: (db, version) async {
         print("database created");
-
-        // late int id;
-        // String author;
-        // String title;
-        // String description;
-        // String url;
-        // String urlToImage;
-        // String publishedAt;
-        // String content;
-        // // String sourceid;
-        // // String sourcename;
-        // // NewsSource? source;
-        // bool bookMarked = false;
         db
             .execute(
                 'CREATE TABLE news (id INTEGER PRIMARY KEY,author TEXT,title TEXT, description TEXT,url Text,urlToImage Text,publishedAt Text,content Text,bookmarked Text) ')
@@ -158,7 +140,7 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  void updateData({required String bookmarked, required int id}) {
+  Future<void> updateData({required String bookmarked, required int id}) async {
     emit(UpdatingDatabseLoadingState());
     database.rawUpdate('UPDATE news SET bookmarked = ? WHERE id = ?',
         [bookmarked, id]).then((value) {
@@ -167,19 +149,13 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  insertToDB({
-    required String author,
-    required String title,
-    required String description,
-    required String url,
-    required String urlToImage,
-    required String publishedAt,
-    required String content,
+ Future<void> insertToDB({
+    required News newsitem,
   }) async {
     await database.transaction((txn) {
       return txn
           .rawInsert(
-              'INSERT INTO  news(author,title,description,url,urlToImage,publishedAt,content,bookmarked) VALUES("$author","$title","$description","$url","$urlToImage","$publishedAt","$content","no")')
+              'INSERT INTO  news(author,title,description,url,urlToImage,publishedAt,content,bookmarked) VALUES("${newsitem.author}","${newsitem.title}","${newsitem.description}","${newsitem.url}","${newsitem.urlToImage}","${newsitem.publishedAt}","${newsitem.content}","no")')
           .then((value) {
         print("$value is inserted");
         emit(InsertDatabaseState());
@@ -198,6 +174,7 @@ class AppCubit extends Cubit<AppState> {
         if (element['bookmarked'] == 'yes') {
           bookMarkedData.add(element);
         }
+        newsItemDatadb.add(element);
       });
 
       emit(GetDatabaseState());

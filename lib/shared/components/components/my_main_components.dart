@@ -16,7 +16,16 @@ Widget newsItem({
       onTap: () {
         // AppCubit.get(context).changeUrl(URL: '${dataList['url']}');
         // _launchURL('${dataList['url']}');
-        navigateTo(context, Details_Screen(News( "dataList[author]" , dataList["title"],dataList["description"], dataList["url"], dataList["urlToImage"],  dataList["publishedAt"], "dataList[content]")));
+        News newsItem = News(
+            dataList['author'] ?? "" ,
+            dataList["title"],
+            dataList["description"],
+            dataList["url"],
+            dataList["urlToImage"],
+            dataList["publishedAt"],
+             dataList['content'] ?? "" ,);
+        newsItem.insrtelementdb(context);
+        navigateTo(context, Details_Screen(newsItem));
       },
       child: Row(
         children: [
@@ -49,9 +58,9 @@ Widget newsItem({
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 Text(
-                   maxLines: 2,
+                  maxLines: 2,
                   "${dataList["description"]}",
-                   style:Theme.of(context).textTheme.bodySmall,
+                  style: Theme.of(context).textTheme.bodySmall,
                 )
               ],
             ),
@@ -66,26 +75,29 @@ void navigateTo(context, widget) => Navigator.push(
       ),
     );
 
-Widget myImage({required String urlToImage, required String ctg,required BuildContext context}) =>  InkWell(
+Widget myImage(
+        {required String urlToImage,
+        required String ctg,
+        required BuildContext context}) =>
+    InkWell(
       onTap: () {
-         navigateTo(context, CategoriesPage(ctg));
+        navigateTo(context, CategoriesPage(ctg));
       },
-  child: Container(
+      child: Container(
         width: 160.0,
         height: 160.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
             20.0,
           ),
-        
           image: DecorationImage(
             image: AssetImage(urlToImage),
             fit: BoxFit.cover,
           ),
         ),
       ),
-);
-                
+    );
+
 Widget buildTaskItem(Map model, context) => Dismissible(
       key: Key(model['id'].toString()),
       child: Padding(
@@ -98,7 +110,7 @@ Widget buildTaskItem(Map model, context) => Dismissible(
                 '${model['time']}',
               ),
             ),
-          const  SizedBox(
+            const SizedBox(
               width: 20.0,
             ),
             Expanded(
@@ -108,7 +120,7 @@ Widget buildTaskItem(Map model, context) => Dismissible(
                 children: [
                   Text(
                     '${model['title']}',
-                    style:const TextStyle(
+                    style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -122,7 +134,7 @@ Widget buildTaskItem(Map model, context) => Dismissible(
                 ],
               ),
             ),
-          const  SizedBox(
+            const SizedBox(
               width: 20.0,
             ),
             IconButton(
@@ -144,7 +156,7 @@ Widget buildTaskItem(Map model, context) => Dismissible(
                 //   id: model['id'],
                 // );
               },
-              icon:const Icon(
+              icon: const Icon(
                 Icons.archive,
                 color: Colors.black45,
               ),
@@ -204,9 +216,8 @@ Widget myDivider() => Padding(
       ),
     );
 
-String getDateFromApis(String dateAndTime)
-{
- String date = dateAndTime.split("T")[0];
+String getDateFromApis(String dateAndTime) {
+  String date = dateAndTime.split("T")[0];
   return date;
 }
 // String getTimeFromApi(String dateAndTime)

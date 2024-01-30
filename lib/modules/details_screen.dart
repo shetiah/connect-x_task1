@@ -21,7 +21,7 @@ class Details_Screen extends StatelessWidget {
                   onPressed: () {
                     cubit.bookMark(myNewsItem);
                   },
-                  icon: cubit.bookMarkdIcon)
+                  icon: cubit.realbkmarkIcon)
             ]),
             body: SafeArea(
                 child: Column(

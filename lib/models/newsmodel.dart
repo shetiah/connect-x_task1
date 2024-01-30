@@ -3,10 +3,13 @@
 //   String name;
 //   NewsSource(this.id, this.name);
 // }
-int idcount=0;
-class News {
 
-//  static int idcount=0;
+import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:task1/shared/cubit/cubit.dart';
+
+class News {
+ static int nextid=1;
   late int id;
   String author;
   String title;
@@ -29,8 +32,13 @@ class News {
       this.url,
       this.urlToImage,
       this.publishedAt,
-      this.content){
-        id=idcount++;
+      this.content)  {
+        id=nextid-1;
+        nextid++;
       }
+     Future<void> insrtelementdb(context)
+     async {
+      await AppCubit.get(context).insertToDB(newsitem: this);
+     }
   // source = NewsSource(sourceid, sourcename);
 }
