@@ -18,21 +18,22 @@ Widget newsItem({
         // AppCubit.get(context).changeUrl(URL: '${dataList['url']}');
         // _launchURL('${dataList['url']}');
         News newsItem = News(
-            dataList["author"] ?? "" ,
-            dataList["title"]?? "",
-            dataList["description"]?? "",
-            dataList["url"]?? "",
-            dataList["urlToImage"]?? "",
-            dataList["publishedAt"]?? "",
-             dataList["content"] ?? "" ,);
+          dataList["author"] ?? "",
+          dataList["title"] ?? "",
+          dataList["description"] ?? "",
+          dataList["url"] ?? "",
+          dataList["urlToImage"] ?? "",
+          dataList["publishedAt"] ?? "",
+          dataList["content"] ?? "",
+        );
         // newsItem.insrtelementdb(context);
         navigateTo(context, Details_Screen(newsItem));
       },
       child: Row(
         children: [
           Container(
-            width: AppCubit.get(context).getScreenWidth(context)*.3,
-            height:  AppCubit.get(context).getScreenWidth(context)*.3,
+            width: AppCubit.get(context).getScreenWidth(context) * .3,
+            height: AppCubit.get(context).getScreenWidth(context) * .3,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
                 10.0,
@@ -56,9 +57,10 @@ Widget newsItem({
                   "${dataList["title"]}",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
                   maxLines: 2,
@@ -79,7 +81,10 @@ void navigateTo(context, widget) => Navigator.push(
     );
 
 Widget myImage(
-        {required String urlToImage,
+        {required String textname,
+        required Color color,
+        required Color txtColor,
+        required String urlToImage,
         required String ctg,
         required BuildContext context}) =>
     InkWell(
@@ -87,15 +92,43 @@ Widget myImage(
         navigateTo(context, CategoriesPage(ctg));
       },
       child: Container(
-        width: 160.0,
-        height: 160.0,
+        height: AppCubit.get(context).getScreenHeight(context) * .21,
+        width: AppCubit.get(context).getScreenHeight(context) * .2,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            20.0,
-          ),
-          image: DecorationImage(
-            image: AssetImage(urlToImage),
-            fit: BoxFit.cover,
+          color: color,
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: AppCubit.get(context).getScreenHeight(context) * .007,
+              ),
+              Center(
+                child: Container(
+                  width: AppCubit.get(context).getScreenHeight(context) * .15,
+                  height: AppCubit.get(context).getScreenHeight(context) * .15,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      20.0,
+                    ),
+                    image: DecorationImage(
+                      image: AssetImage(urlToImage),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: AppCubit.get(context).getScreenHeight(context) * .006,
+              ),
+              Text(textname,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: txtColor,
+                        fontWeight: FontWeight.bold,
+                      ))
+            ],
           ),
         ),
       ),
