@@ -98,38 +98,36 @@ Widget myImage(
           color: color,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
-        child: Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: AppCubit.get(context).getScreenHeight(context) * .007,
-              ),
-              Center(
-                child: Container(
-                  width: AppCubit.get(context).getScreenHeight(context) * .15,
-                  height: AppCubit.get(context).getScreenHeight(context) * .15,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      20.0,
-                    ),
-                    image: DecorationImage(
-                      image: AssetImage(urlToImage),
-                      fit: BoxFit.cover,
-                    ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: AppCubit.get(context).getScreenHeight(context) * .007,
+            ),
+            Center(
+              child: Container(
+                width: AppCubit.get(context).getScreenHeight(context) * .15,
+                height: AppCubit.get(context).getScreenHeight(context) * .15,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    20.0,
+                  ),
+                  image: DecorationImage(
+                    image: AssetImage(urlToImage),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              SizedBox(
-                height: AppCubit.get(context).getScreenHeight(context) * .006,
-              ),
-              Text(textname,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: txtColor,
-                        fontWeight: FontWeight.bold,
-                      ))
-            ],
-          ),
+            ),
+            SizedBox(
+              height: AppCubit.get(context).getScreenHeight(context) * .006,
+            ),
+            Text(textname,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: txtColor,
+                      fontWeight: FontWeight.bold,
+                    ))
+          ],
         ),
       ),
     );
