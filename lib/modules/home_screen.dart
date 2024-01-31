@@ -36,19 +36,22 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 15,
+                SizedBox(
+                  height: cubit.getScreenHeight(context) * .001,
                 ),
                 ConditionalBuilder(
                   builder: (BuildContext context) {
                     return Expanded(
-                      child: ListView.separated(
-                          itemBuilder: (context, i) => newsItem(
-                              context: context,
-                              dataList: cubit.initalData[i]),
-                          separatorBuilder: (context, index) =>
-                              separtor(),
-                          itemCount: cubit.initalData.length),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.only(end:cubit.getScreenWidth(context)*.04),
+                        child: ListView.separated(
+                            itemBuilder: (context, i) => newsItem(
+                                context: context,
+                                dataList: cubit.initalData[i]),
+                            separatorBuilder: (context, index) =>
+                                separtor(),
+                            itemCount: cubit.initalData.length),
+                      ),
                     );
                   },
                   fallback: (BuildContext context) {

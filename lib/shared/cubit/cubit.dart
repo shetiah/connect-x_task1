@@ -20,15 +20,15 @@ class AppCubit extends Cubit<AppState> {
   bool noResults = true;
   // Icon realbkmarkIcon = unBookMarkedicon;
   Icon getSuitableBookMark({required News newsItem}) {
-     Icon i=const Icon(Icons.signal_cellular_null) ;
+    Icon i = const Icon(Icons.signal_cellular_null);
     for (var e in News.allNewsBkMk) {
       if (e.containsKey(newsItem.url)) {
-         i= e[newsItem.url]!.bookMarked
-        ? const Icon(Icons.bookmark)
-        : const Icon(Icons.bookmark_outline);
+        i = e[newsItem.url]!.bookMarked
+            ? const Icon(Icons.bookmark)
+            : const Icon(Icons.bookmark_outline);
       }
     }
-   
+
     // print(newsItem.bookMarked);
     emit(GetBookMark());
     return i;
@@ -40,28 +40,11 @@ class AppCubit extends Cubit<AppState> {
         if (element[newsitem.url]!.bookMarked) {
           newsitem.bookMarked = false;
           element[newsitem.url]?.bookMarked = false;
-          await updateData(bookmarked: "no", url: newsitem.url);
-          var tempe ;
-          for (var e2 in bookMarkedData) {
-            if (e2['url'] == newsitem.url) {
-              tempe=e2;
-            }
-          }
-          bookMarkedData.remove(tempe);
+          await deleteFromdbunbk(url: newsitem.url);
         } else {
           newsitem.bookMarked = true;
           element[newsitem.url]?.bookMarked = true;
-          bool alreadyExist = false;
-          for (var element in newsItemDatadb) {
-            if (element['url'] == newsitem.url) {
-              bookMarkedData.add(element);
-              alreadyExist = true;
-            }
-          }
-          if (!alreadyExist) {
-            emit(BookMarkErrorState());
-          }
-          await updateData(bookmarked: "yes", url: newsitem.url);
+          await insertToDB(newsitem: newsitem);
         }
       }
     }
@@ -94,11 +77,11 @@ class AppCubit extends Cubit<AppState> {
   List<dynamic> categoryData = [];
 
   List<dynamic> bookMarkedData = [];
-  List<dynamic> newsItemDatadb = [];
 
   void getInitalDataFromApis() {
     emit(LoadingInitalDataState());
     initalData = [];
+    // News.allNewsBkMk = [];
     DioHelper.getData(
       url: 'v2/top-headlines',
       query: {
@@ -107,6 +90,22 @@ class AppCubit extends Cubit<AppState> {
       },
     ).then((value) {
       initalData = value.data['articles'];
+      initalData.forEach((i) {
+        News temp = News(
+            i['author'] ?? "",
+            i['title'] ?? "",
+            i['description'] ?? "",
+            i['url'] ?? "",
+            i['urlToImage'] ?? "",
+            i['publishedAt'] ?? "",
+            i['content'] ?? "");
+        bool x = false;
+        
+        if (x == false) {
+          News.allNewsBkMk.add({i['url']: temp});
+        }
+      });
+      // for (var i in initalData) {}
       emit(GetInitDataState());
     }).catchError((onError) {
       print(onError.toString());
@@ -117,6 +116,7 @@ class AppCubit extends Cubit<AppState> {
   void getCategoricalDataFromApis({required String category}) {
     emit(LoadingCategoricalDataState());
     categoryData = [];
+
     DioHelper.getData(
       url: 'v2/top-headlines',
       query: {
@@ -126,11 +126,27 @@ class AppCubit extends Cubit<AppState> {
       },
     ).then((value) {
       categoryData = value.data['articles'];
-      for (var element in categoryData) {
-        print("-----------xx------");
-        print(element["urlToImage"]);
-        print("-----------xx------");
-      }
+      categoryData.forEach((element) {
+        News temp = News(
+          element["author"] ?? "",
+          element["title"] ?? "",
+          element["description"] ?? "",
+          element["url"] ?? "",
+          element["urlToImage"] ?? "",
+          element["publishedAt"] ?? "",
+          element["content"] ?? "",
+        );
+        bool x = false;
+        for (var n in News.allNewsBkMk) {
+          if (n.containsKey(element['url'])) {
+            x = true;
+          }
+        }
+        if (x == false) {
+          News.allNewsBkMk.add({element['url']: temp});
+        }
+      });
+
       emit(GetCategoricalDataState());
     }).catchError((onError) {
       print(onError.toString());
@@ -147,7 +163,7 @@ class AppCubit extends Cubit<AppState> {
         print("database created");
         db
             .execute(
-                'CREATE TABLE news (author TEXT,title TEXT, description TEXT,url Text PRIMARY KEY,urlToImage Text,publishedAt Text,content Text,bookmarked Text) ')
+                'CREATE TABLE news (url Text PRIMARY KEY,author Text,title Text,description Text,urlToImage Text,publishedAt text,content text)')
             .then((value) {
           print("Table created");
         }).catchError((onError) {
@@ -165,20 +181,21 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  Future<void> updateData(
-      {required String bookmarked, required String url}) async {
-    emit(UpdatingDatabseLoadingState());
-    database.rawUpdate('UPDATE news SET bookmarked = ? WHERE url = ?',
-        [bookmarked, url]).then((value) {
-      getdataDatabase(database);
-      emit(UpdateDataStatus());
-    });
-  }
+  // Future<void> updateData(
+  //     {required String bookmarked, required String url}) async {
+  //   emit(UpdatingDatabseLoadingState());
+  //   database.rawUpdate('UPDATE news SET bookmarked = ? WHERE url = ?',
+  //       [bookmarked, url]).then((value) async {
+  //    await getdataDatabase(database);
+  //     emit(UpdateDataStatus());
+  //   });
+  // }
 
   Future<void> insertToDB({
     required News newsitem,
   }) async {
-    for (var element in newsItemDatadb) {
+    
+    for (var element in bookMarkedData) {
       if (newsitem.url == element['url']) {
         return;
       }
@@ -187,7 +204,7 @@ class AppCubit extends Cubit<AppState> {
     await database.transaction((txn) {
       return txn
           .rawInsert(
-              'INSERT INTO news(author,title,description,url,urlToImage,publishedAt,content,bookmarked) VALUES("${newsitem.author}","${newsitem.title}","${newsitem.description}","${newsitem.url}","${newsitem.urlToImage}","${newsitem.publishedAt}","${newsitem.content}","no")')
+              'INSERT INTO news(url,author,title ,description,urlToImage,publishedAt,content) VALUES("${newsitem.url}","${newsitem.author}","${newsitem.title}","${newsitem.description}","${newsitem.urlToImage}","${newsitem.publishedAt}","${newsitem.content}")')
           .then((value) async {
         emit(InsertDatabaseState());
         await getdataDatabase(database);
@@ -200,34 +217,25 @@ class AppCubit extends Cubit<AppState> {
   getdataDatabase(db) {
     emit(GetDatabaseLoadingState());
     bookMarkedData = [];
-    newsItemDatadb = [];
-    News.allNewsBkMk=[];
     db.rawQuery('SELECT * FROM news').then((value) {
       value.forEach((element) {
-        if (element['bookmarked'] == 'yes') {
           bookMarkedData.add(element);
+        for (var i in News.allNewsBkMk) {
+          if (i.containsKey(element['url'])) {
+            i[element['url']]?.bookMarked =true;
+          }
         }
-        newsItemDatadb.add(element);
-        News temp = News(
-            element['author'],
-            element['title'],
-            element['description'],
-            element['url'],
-            element['urlToImage'],
-            element['publishedAt'],
-            element['content']);
-        temp.bookMarked = element['bookmarked'] == 'yes' ? true : false;
-        News.allNewsBkMk.add({element['url']: temp});
       });
       emit(GetDatabaseState());
     });
   }
 
-  // void deleteItem({required id}) {
-  //   emit(DeletingDatabseLoadingState());
-  //   database.rawDelete('DELETE FROM news WHERE id = ?', [id]).then((value) {
-  //     getdataDatabase(database);
-  //     emit(DeleteDataStatus());
-  //   });
-  // }
+  Future<void> deleteFromdbunbk({required url}) async {
+    emit(DeletingDatabseLoadingState());
+    await database
+        .rawDelete('DELETE FROM news WHERE url = ?', [url]).then((value) async {
+      await getdataDatabase(database);
+      emit(DeleteDataStatus());
+    });
+  }
 }

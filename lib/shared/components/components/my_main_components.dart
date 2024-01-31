@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:task1/models/newsmodel.dart';
 import 'package:task1/modules/categoriees_data_screen.dart';
 import 'package:task1/modules/details_screen.dart';
+import 'package:task1/shared/cubit/cubit.dart';
 
 Widget separtor() => const SizedBox(
       height: 10,
@@ -17,21 +18,21 @@ Widget newsItem({
         // AppCubit.get(context).changeUrl(URL: '${dataList['url']}');
         // _launchURL('${dataList['url']}');
         News newsItem = News(
-            dataList['author'] ?? "" ,
-            dataList["title"],
-            dataList["description"],
-            dataList["url"],
-            dataList["urlToImage"],
-            dataList["publishedAt"],
-             dataList['content'] ?? "" ,);
-        newsItem.insrtelementdb(context);
+            dataList["author"] ?? "" ,
+            dataList["title"]?? "",
+            dataList["description"]?? "",
+            dataList["url"]?? "",
+            dataList["urlToImage"]?? "",
+            dataList["publishedAt"]?? "",
+             dataList["content"] ?? "" ,);
+        // newsItem.insrtelementdb(context);
         navigateTo(context, Details_Screen(newsItem));
       },
       child: Row(
         children: [
           Container(
-            width: 120.0,
-            height: 120.0,
+            width: AppCubit.get(context).getScreenWidth(context)*.3,
+            height:  AppCubit.get(context).getScreenWidth(context)*.3,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
                 10.0,
@@ -55,7 +56,9 @@ Widget newsItem({
                   "${dataList["title"]}",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold
+                  ),
                 ),
                 Text(
                   maxLines: 2,

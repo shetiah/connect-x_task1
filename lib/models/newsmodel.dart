@@ -25,9 +25,9 @@ class News {
         // Map<int,News> temp={id:this};
         // allNews.add(temp);
       }
-     Future<void> insrtelementdb(context)
-     async {
-      await AppCubit.get(context).insertToDB(newsitem: this);
-     }
+    //  Future<void> insrtelementdb(context)
+    //  async {
+    //   await AppCubit.get(context).insertToDB(newsitem: this);
+    //  }
   // source = NewsSource(sourceid, sourcename);
 }
