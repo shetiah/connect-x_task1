@@ -34,3 +34,7 @@ class GetDatabaseState extends AppState {}
 class UpdatingDatabseLoadingState extends AppState{}
 class UpdateDataStatus extends AppState{}
 class InsertDatabaseState extends AppState{}
+class BookMarkErrorState extends AppState{}
+class DeletingDatabseLoadingState extends AppState{}
+class DeleteDataStatus extends AppState {}
+class GetBookMark extends AppState {}

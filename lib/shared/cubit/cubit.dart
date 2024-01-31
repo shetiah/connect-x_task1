@@ -7,7 +7,6 @@ import 'package:task1/modules/home_screen.dart';
 import 'package:task1/modules/bookmarked_screen.dart';
 
 import 'package:task1/modules/categories_choice_screen.dart';
-import 'package:task1/shared/components/constants/const.dart';
 import 'package:task1/shared/cubit/states.dart';
 import 'package:task1/shared/network/remote/dioHelper.dart';
 
@@ -19,32 +18,59 @@ class AppCubit extends Cubit<AppState> {
 
   String? lastQeuery;
   bool noResults = true;
-  Icon realbkmarkIcon = unBookMarkedicon;
+  // Icon realbkmarkIcon = unBookMarkedicon;
+  Icon getSuitableBookMark({required News newsItem}) {
+     Icon i=const Icon(Icons.signal_cellular_null) ;
+    for (var e in News.allNewsBkMk) {
+      if (e.containsKey(newsItem.url)) {
+         i= e[newsItem.url]!.bookMarked
+        ? const Icon(Icons.bookmark)
+        : const Icon(Icons.bookmark_outline);
+      }
+    }
+   
+    // print(newsItem.bookMarked);
+    emit(GetBookMark());
+    return i;
+  }
 
   Future<void> bookMark(News newsitem) async {
-    if (newsitem.bookMarked) {
-     await updateData(bookmarked: "no", id: newsitem.id);
-      realbkmarkIcon = unBookMarkedicon;
-    } else {
-      bool alreadyExist = false;
-      for (var element in bookMarkedData) {
-        if (element['id'] == newsitem.id) {
-          alreadyExist = true;
+    for (var element in News.allNewsBkMk) {
+      if (element.containsKey(newsitem.url)) {
+        if (element[newsitem.url]!.bookMarked) {
+          newsitem.bookMarked = false;
+          element[newsitem.url]?.bookMarked = false;
+          await updateData(bookmarked: "no", url: newsitem.url);
+          var tempe ;
+          for (var e2 in bookMarkedData) {
+            if (e2['url'] == newsitem.url) {
+              tempe=e2;
+            }
+          }
+          bookMarkedData.remove(tempe);
+        } else {
+          newsitem.bookMarked = true;
+          element[newsitem.url]?.bookMarked = true;
+          bool alreadyExist = false;
+          for (var element in newsItemDatadb) {
+            if (element['url'] == newsitem.url) {
+              bookMarkedData.add(element);
+              alreadyExist = true;
+            }
+          }
+          if (!alreadyExist) {
+            emit(BookMarkErrorState());
+          }
+          await updateData(bookmarked: "yes", url: newsitem.url);
         }
       }
-      if (alreadyExist) {
-       await updateData(bookmarked: "yes", id: newsitem.id);
-      } else {
-       await insertToDB(newsitem: newsitem);
-        await updateData(bookmarked: "yes", id: newsitem.id);
-      }
-      realbkmarkIcon = bookmarkedicon;
     }
-    newsitem.bookMarked = !newsitem.bookMarked;
     emit(BookMarkedState());
   }
-Future<void> deleteDatabase(String path) =>
-    databaseFactory.deleteDatabase(path);
+
+  Future<void> deleteDatabase(String path) =>
+      databaseFactory.deleteDatabase(path);
+
   double getScreenWidth(BuildContext context) =>
       MediaQuery.of(context).size.width;
   double getScreenHeight(BuildContext context) =>
@@ -66,7 +92,6 @@ Future<void> deleteDatabase(String path) =>
   List<dynamic> initalData = [];
 
   List<dynamic> categoryData = [];
-  List<dynamic> searchData = [];
 
   List<dynamic> bookMarkedData = [];
   List<dynamic> newsItemDatadb = [];
@@ -122,7 +147,7 @@ Future<void> deleteDatabase(String path) =>
         print("database created");
         db
             .execute(
-                'CREATE TABLE news (id INTEGER PRIMARY KEY,author TEXT,title TEXT, description TEXT,url Text,urlToImage Text,publishedAt Text,content Text,bookmarked Text) ')
+                'CREATE TABLE news (author TEXT,title TEXT, description TEXT,url Text PRIMARY KEY,urlToImage Text,publishedAt Text,content Text,bookmarked Text) ')
             .then((value) {
           print("Table created");
         }).catchError((onError) {
@@ -140,26 +165,32 @@ Future<void> deleteDatabase(String path) =>
     });
   }
 
-  Future<void> updateData({required String bookmarked, required int id}) async {
+  Future<void> updateData(
+      {required String bookmarked, required String url}) async {
     emit(UpdatingDatabseLoadingState());
-    database.rawUpdate('UPDATE news SET bookmarked = ? WHERE id = ?',
-        [bookmarked, id]).then((value) {
+    database.rawUpdate('UPDATE news SET bookmarked = ? WHERE url = ?',
+        [bookmarked, url]).then((value) {
       getdataDatabase(database);
       emit(UpdateDataStatus());
     });
   }
 
- Future<void> insertToDB({
+  Future<void> insertToDB({
     required News newsitem,
   }) async {
+    for (var element in newsItemDatadb) {
+      if (newsitem.url == element['url']) {
+        return;
+      }
+    }
+
     await database.transaction((txn) {
       return txn
           .rawInsert(
-              'INSERT INTO  news(author,title,description,url,urlToImage,publishedAt,content,bookmarked) VALUES("${newsitem.author}","${newsitem.title}","${newsitem.description}","${newsitem.url}","${newsitem.urlToImage}","${newsitem.publishedAt}","${newsitem.content}","no")')
-          .then((value) {
-        print("$value is inserted");
+              'INSERT INTO news(author,title,description,url,urlToImage,publishedAt,content,bookmarked) VALUES("${newsitem.author}","${newsitem.title}","${newsitem.description}","${newsitem.url}","${newsitem.urlToImage}","${newsitem.publishedAt}","${newsitem.content}","no")')
+          .then((value) async {
         emit(InsertDatabaseState());
-        getdataDatabase(database);
+        await getdataDatabase(database);
       }).catchError((error) {
         print("${error.toString()} my error");
       });
@@ -169,83 +200,34 @@ Future<void> deleteDatabase(String path) =>
   getdataDatabase(db) {
     emit(GetDatabaseLoadingState());
     bookMarkedData = [];
+    newsItemDatadb = [];
+    News.allNewsBkMk=[];
     db.rawQuery('SELECT * FROM news').then((value) {
       value.forEach((element) {
         if (element['bookmarked'] == 'yes') {
           bookMarkedData.add(element);
         }
         newsItemDatadb.add(element);
+        News temp = News(
+            element['author'],
+            element['title'],
+            element['description'],
+            element['url'],
+            element['urlToImage'],
+            element['publishedAt'],
+            element['content']);
+        temp.bookMarked = element['bookmarked'] == 'yes' ? true : false;
+        News.allNewsBkMk.add({element['url']: temp});
       });
-
       emit(GetDatabaseState());
     });
   }
 
-//  Future<dynamic> alterTable(String TableName, String ColumneName,Database db) async {
-//   //NOTE: works but i created it by my own
-//    var count = await db.execute("ALTER TABLE $TableName ADD "
-//        "COLUMN $ColumneName TEXT;");
-//    print(await db.query(TableName));
-//    return count;
-//  }
-
-  // void searchOnData({required String tobeSearched}) {
-  //   if (tobeSearched == lastQeuery) return;
-  //   emit(LoadingSearchState());
-  //   lastQeuery = tobeSearched;
-  //   // startTimer();
-  //   searchData = [];
-  //   bool blank = tobeSearched?.trim()?.isEmpty ?? true;
-  //   if (blank) {
-  //     noResults = true;
-  //     emit(SearchDataState());
-  //     return;
-  //   }
-
-  //   DioHelper.getData(
-  //     url: 'v2/everything',
-  //     query: {
-  //       'q': '$tobeSearched',
-  //       'apiKey': '65f7f556ec76449fa7dc7c0069f040ca',
-  //     },
-  //   ).then((value) {
-  //     //method data to extract data from response
-  //     searchData = value.data['articles'];
-
-  //     if (searchData == null || searchData.isEmpty) {
-  //       print(searchData);
-  //       noResults = true;
-  //     } else {
-  //       noResults = false;
-  //     }
-  //     print(noResults);
-  //     emit(SearchDataState());
-  //   }).catchError((e) {
-  //     // The request was made and the server responded with a status code
-  //     // that falls out of the range of 2xx and is also not 304.
-  //     if (e.response != null) {
-  //       print(e.response.data);
-  //       print(e.response.headers);
-  //       print(e.response.requestOptions);
-  //     } else {
-  //       // Something happened in setting up or sending the request that triggered an Error
-  //       print(e.requestOptions);
-  //       print(e.message);
-  //     }
-  //     emit(GetDatusrrorState());
+  // void deleteItem({required id}) {
+  //   emit(DeletingDatabseLoadingState());
+  //   database.rawDelete('DELETE FROM news WHERE id = ?', [id]).then((value) {
+  //     getdataDatabase(database);
+  //     emit(DeleteDataStatus());
   //   });
   // }
-
-//   void deleteTask({
-//    required id
-// })
-// {
-//  emit(DeletingDatabseLoadingState());
-//   database.rawDelete('DELETE FROM tasks WHERE id = ?', [id])
-//       .then((value)
-//   {
-//     getdataDatabase(database);
-//     emit(DeleteDataStatus());
-//   });
-// }
 }

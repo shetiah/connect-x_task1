@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task1/models/newsmodel.dart';
 import 'package:task1/shared/components/components/my_main_components.dart';
+import 'package:task1/shared/components/constants/const.dart';
 import 'package:task1/shared/cubit/cubit.dart';
 import 'package:task1/shared/cubit/states.dart';
 
@@ -18,10 +19,10 @@ class Details_Screen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(actions: [
               IconButton(
-                  onPressed: () {
-                    cubit.bookMark(myNewsItem);
+                  onPressed: () async {
+                   await cubit.bookMark(myNewsItem);
                   },
-                  icon: cubit.realbkmarkIcon)
+                  icon:cubit.getSuitableBookMark(newsItem: myNewsItem))
             ]),
             body: SafeArea(
                 child: Column(
